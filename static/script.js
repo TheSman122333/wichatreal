@@ -1,18 +1,21 @@
 document.addEventListener('DOMContentLoaded', function() {
 const socket = io({
-      // Force WebSocket-first with fallback
-      transports: ['websocket', 'polling'],
-      upgrade: true,
-      rememberUpgrade: true,
-      // Timeout settings
-      reconnection: true,
-      reconnectionAttempts: 5,
-      reconnectionDelay: 1000,
-      // Render-specific fixes
-      path: '/socket.io',
-      secure: true,
-      rejectUnauthorized: false
-    });
+  // Render-specific configuration
+  transports: ['websocket', 'polling'],
+  upgrade: true,
+  rememberUpgrade: true,
+  secure: true,
+  path: '/socket.io',
+  // Optimize reconnection
+  reconnection: true,
+  reconnectionAttempts: Infinity,
+  reconnectionDelay: 1000,
+  reconnectionDelayMax: 5000,
+  // Timeouts
+  timeout: 20000,
+  // Force WebSocket when available
+  forceNew: true
+});
     let currentRoom = 'general';
     const currentUser = document.querySelector('.user-info h3').textContent;
     
