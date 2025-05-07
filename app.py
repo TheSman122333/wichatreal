@@ -35,15 +35,14 @@ def static_files(filename):
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your-secret-key-here'
 CORS(app)
+# Update your SocketIO initialization
 socketio = SocketIO(app,
     cors_allowed_origins="*",
     async_mode='gevent',
-    # Add these:
-    logger=True,
-    engineio_logger=True,
-    always_connect=True,
-    ping_interval=25,
-    ping_timeout=60
+    # Critical fixes below
+    allow_upgrades=True,
+    transports=['websocket', 'polling'],
+    engineio_logger=True  # Enable temporarily for debugging
 )
 
 # Configure logging
