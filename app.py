@@ -1,3 +1,16 @@
+from gevent import monkey
+monkey.patch_all()
+
+from flask import Flask, render_template, session
+from flask_socketio import SocketIO
+import os
+import time
+
+app = Flask(__name__)
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret')
+
+
+
 from flask import Flask, render_template, request, session, redirect, url_for
 from flask_socketio import SocketIO, join_room, leave_room, emit
 from datetime import datetime
@@ -7,10 +20,17 @@ from logging.handlers import RotatingFileHandler
 from collections import defaultdict
 from flask_cors import CORS
 
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your-secret-key-here'
 CORS(app)
-socketio = SocketIO(app, cors_allowed_origins="*", logger=True, engineio_logger=True)
+socketio = SocketIO(app,
+                  async_mode='gevent',
+                  cors_allowed_origins="*",
+                  ping_timeout=30,
+                  ping_interval=25,
+                  logger=False,
+                  engineio_logger=False)
 
 # Configure logging
 if not os.path.exists('chat_logs'):
@@ -170,9 +190,9 @@ def handle_request_users():
     if 'username' in session:
         emit('current_users', {'users': list(connected_users.keys())}, room=request.sid)
 
+
 if __name__ == '__main__':
-    socketio.run(app,
-                host='0.0.0.0',
-                port=5000,
-                debug=True,
-                allow_unsafe_werkzeug=True)
+    port = int(os.environ.get('PORT', 5000))
+    socketio.run(app, host='0.0.0.0', port=port)
+
+
