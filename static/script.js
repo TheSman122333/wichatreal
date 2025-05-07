@@ -1,5 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const socket = io();
+    const socket = io({
+          transports: ['websocket', 'polling'],
+          reconnection: true,
+          reconnectionAttempts: Infinity,
+          reconnectionDelay: 1000,
+          path: '/socket.io'  // Explicit path
+        });
     let currentRoom = 'general';
     const currentUser = document.querySelector('.user-info h3').textContent;
     
