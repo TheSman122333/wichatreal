@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WIChat</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="chat-container">
+            <div class="sidebar">
+                <div class="user-info">
+                    <h3>{{ username }}</h3>
+                    <span class="status online">Online</span>
+                    <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+                </div>
+                
+                <div class="rooms">
+                    <h3>Rooms</h3>
+                    <ul>
+                        {% for room in rooms %}
+                            <li><a href="#" class="room-link" data-room="{{ room }}">{{ room|title }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                
+                <div class="users">
+                    <h3>Online Users <span id="user-count">(0)</span></h3>
+                    <ul id="user-list">
+                        <!-- Dynamically populated -->
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="chat-area">
+                <div class="room-info">
+                    <h2 id="current-room">General</h2>
+                    <div id="room-users"></div>
+                </div>
+                
+                <div class="messages" id="messages">
+                    <!-- Messages will be displayed here -->
+                </div>
+                
+                <div class="message-form">
+                    <textarea id="message-input" placeholder="Type your message here..." autofocus></textarea>
+                    <button id="send-button">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <audio id="ping-sound" preload="auto">
+        <source src="{{ url_for('static', filename='sounds/ping.mp3') }}" type="audio/mpeg">
+    </audio>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
