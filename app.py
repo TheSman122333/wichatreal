@@ -36,12 +36,15 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your-secret-key-here'
 CORS(app)
 socketio = SocketIO(app,
-                  async_mode='gevent',
-                  cors_allowed_origins="*",
-                  ping_timeout=30,
-                  ping_interval=25,
-                  logger=False,
-                  engineio_logger=False)
+    cors_allowed_origins="*",
+    async_mode='gevent',
+    # Add these:
+    logger=True,
+    engineio_logger=True,
+    always_connect=True,
+    ping_interval=25,
+    ping_timeout=60
+)
 
 # Configure logging
 if not os.path.exists('chat_logs'):
