@@ -1,11 +1,18 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const socket = io({
-          transports: ['websocket', 'polling'],
-          reconnection: true,
-          reconnectionAttempts: Infinity,
-          reconnectionDelay: 1000,
-          path: '/socket.io'  // Explicit path
-        });
+const socket = io({
+      // Force WebSocket-first with fallback
+      transports: ['websocket', 'polling'],
+      upgrade: true,
+      rememberUpgrade: true,
+      // Timeout settings
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
+      // Render-specific fixes
+      path: '/socket.io',
+      secure: true,
+      rejectUnauthorized: false
+    });
     let currentRoom = 'general';
     const currentUser = document.querySelector('.user-info h3').textContent;
     
