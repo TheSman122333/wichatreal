@@ -36,13 +36,19 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your-secret-key-here'
 CORS(app)
 # Update your SocketIO initialization
+# Add to top of fil
+# Update SocketIO initialization
 socketio = SocketIO(app,
     cors_allowed_origins="*",
     async_mode='gevent',
-    # Critical fixes below
-    allow_upgrades=True,
+    # Required fixes:
     transports=['websocket', 'polling'],
-    engineio_logger=True  # Enable temporarily for debugging
+    allow_upgrades=True,
+    ping_interval=25,
+    ping_timeout=60,
+    # For Render specifically:
+    http_compression=True,
+    engineio_logger=True  # Keep enabled for debugging
 )
 
 # Configure logging
