@@ -21,6 +21,17 @@ from collections import defaultdict
 from flask_cors import CORS
 
 
+from flask import send_from_directory
+
+@app.route('/static/<path:filename>')
+def static_files(filename):
+    return send_from_directory('static', filename, mimetype={
+        '.css': 'text/css',
+        '.js': 'application/javascript',
+        '.mp3': 'audio/mpeg'
+    }.get(filename.rsplit('.', 1)[-1].lower(), 'text/plain'))
+
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your-secret-key-here'
 CORS(app)
