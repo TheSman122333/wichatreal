@@ -90,7 +90,7 @@ def chat():
         return redirect(url_for('login'))
     return render_template('chat.html', 
                          username=session['username'],
-                         rooms=['general', 'tech', 'random'])
+                         rooms=['general'])
 
 @app.route('/logout')
 def logout():
